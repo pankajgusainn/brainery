@@ -87,7 +87,6 @@ export default function App() {
         isLoading: false
       }));
 
-      // Smooth scroll to bottom after response
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth'
@@ -131,54 +130,30 @@ export default function App() {
       <AnimatedBackground />
       
       <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
-        <div className="relative bg-[var(--bg-secondary)] backdrop-blur-xl rounded-2xl shadow-[var(--box-shadow)] p-4 md:p-6 border border-[rgba(255,255,255,0.1)]">
-          {/* Animated border lines */}
-          <div className="absolute inset-0 rounded-2xl overflow-hidden">
-            {/* Top border */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
-            
-            {/* Bottom border */}
-            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
-            
-            {/* Left border with animation */}
-            <div className="absolute left-0 top-0 w-[2px] h-full">
-              <div className="absolute inset-0 animate-light-up-down bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
-              <div className="absolute inset-0 animate-light-up-down-delayed bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-50" />
-            </div>
-            
-            {/* Right border with animation */}
-            <div className="absolute right-0 top-0 w-[2px] h-full">
-              <div className="absolute inset-0 animate-light-down-up bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
-              <div className="absolute inset-0 animate-light-down-up-delayed bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-50" />
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10">
-            <BraineryHeader />
-            
-            <div className="min-h-[400px] flex flex-col">
-              {chatState.messages.length === 0 ? (
-                <WelcomeHeader 
-                  onPromptSelect={handleSendMessage}
-                  userName={userData?.name}
-                />
-              ) : (
-                <ChatContainer
-                  messages={chatState.messages}
-                  isLoading={chatState.isLoading}
-                  error={chatState.error}
-                />
-              )}
-            </div>
-            
-            <div className="mt-4 sticky bottom-0 bg-[var(--bg-secondary)] pt-4">
-              <ChatInput
-                onSend={handleSendMessage}
-                onClear={handleClearChat}
-                disabled={chatState.isLoading || !geminiService}
+        <div className="relative z-10">
+          <BraineryHeader />
+          
+          <div className="min-h-[400px] flex flex-col">
+            {chatState.messages.length === 0 ? (
+              <WelcomeHeader 
+                onPromptSelect={handleSendMessage}
+                userName={userData?.name}
               />
-            </div>
+            ) : (
+              <ChatContainer
+                messages={chatState.messages}
+                isLoading={chatState.isLoading}
+                error={chatState.error}
+              />
+            )}
+          </div>
+          
+          <div className="mt-4 sticky bottom-0 pt-4">
+            <ChatInput
+              onSend={handleSendMessage}
+              onClear={handleClearChat}
+              disabled={chatState.isLoading || !geminiService}
+            />
           </div>
         </div>
       </div>
