@@ -1,7 +1,7 @@
 import React from 'react';
 import { Message } from '../types/chat';
-import { ChatMessage } from './ChatMessage';
-import { LoadingSpinner } from './LoadingSpinner';
+import { ChatMessage } from './chat/ChatMessage';
+import { LoadingAnimation } from './loading/LoadingAnimation';
 
 interface ChatContainerProps {
   messages: Message[];
@@ -15,7 +15,13 @@ export function ChatContainer({ messages, isLoading, error }: ChatContainerProps
       {messages.map((message, index) => (
         <ChatMessage key={index} message={message} />
       ))}
-      {isLoading && <LoadingSpinner />}
+      
+      {isLoading && (
+        <div className="bg-[rgba(13,13,13,0.95)] border border-[rgba(255,255,255,0.1)] rounded-lg backdrop-blur-lg">
+          <LoadingAnimation message="Brainery is thinking" />
+        </div>
+      )}
+      
       {error && (
         <div className="text-center text-red-400 bg-[rgba(255,0,0,0.1)] border border-red-900 p-3 rounded-lg animate-fade-in">
           {error}

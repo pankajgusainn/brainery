@@ -49,27 +49,36 @@
   }
 }
 
-@keyframes float {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(20px, -20px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+.animate-curve-normal {
+  animation: flowCurve 15s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.5);
-  }
+.animate-curve-fast {
+  animation: flowCurve 8s ease-in-out infinite;
+}
+
+.animate-float-normal {
+  animation: floatOrb 12s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: floatOrb 6s ease-in-out infinite;
+}
+
+.animate-wave-normal {
+  animation: waveFlow 8s ease-in-out infinite;
+}
+
+.animate-wave-fast {
+  animation: waveFlow 4s ease-in-out infinite;
+}
+
+.animate-grid-normal {
+  animation: gridFlow 20s linear infinite;
+}
+
+.animate-grid-fast {
+  animation: gridFlow 10s linear infinite;
 }
 
 .curved-line {

@@ -1,12 +1,18 @@
 import React from 'react';
 
-export function WavePatterns() {
+interface WavePatternsProps {
+  isActive: boolean;
+}
+
+export function WavePatterns({ isActive }: WavePatternsProps) {
+  const speed = isActive ? 'animate-wave-fast' : 'animate-wave-normal';
+  
   return (
     <div className="absolute inset-0">
       {[...Array(3)].map((_, index) => (
         <div
           key={index}
-          className="absolute w-full h-[1px]"
+          className={`absolute w-full h-[1px] ${speed}`}
           style={{
             top: `${25 + index * 25}%`,
             background: `linear-gradient(90deg,
@@ -14,7 +20,6 @@ export function WavePatterns() {
               rgba(0, 255, 157, ${0.4 - index * 0.1}) 50%,
               transparent 100%
             )`,
-            animation: `waveFlow ${8 + index * 2}s ease-in-out infinite`,
             animationDelay: `${-index * 2}s`
           }}
         />

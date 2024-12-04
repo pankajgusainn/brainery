@@ -1,7 +1,12 @@
 import React from 'react';
-import { useAnimatedPath } from '../../hooks/useAnimatedPath';
 
-export function CurvedLines() {
+interface CurvedLinesProps {
+  isActive: boolean;
+}
+
+export function CurvedLines({ isActive }: CurvedLinesProps) {
+  const speed = isActive ? 'animate-curve-fast' : 'animate-curve-normal';
+  
   return (
     <div className="absolute inset-0">
       {[2, 3, 4, 5].map((thickness, index) => (
@@ -10,7 +15,7 @@ export function CurvedLines() {
           className="absolute w-full overflow-hidden"
           style={{ top: `${(index + 1) * 20}%`, height: `${thickness}px` }}
         >
-          <div className="curved-line"
+          <div className={`curved-line ${speed}`}
             style={{
               height: '100%',
               background: `linear-gradient(90deg, 
@@ -18,7 +23,6 @@ export function CurvedLines() {
                 rgba(0, 255, 157, ${0.3 - index * 0.05}) 50%,
                 rgba(0, 255, 157, 0) 100%
               )`,
-              animation: `flowCurve ${10 + index * 2}s ease-in-out infinite`,
               animationDelay: `${-index * 2}s`
             }}
           />

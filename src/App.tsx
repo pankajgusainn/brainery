@@ -9,6 +9,7 @@ import { BraineryHeader } from './components/BraineryHeader';
 import { AnimatedBackground } from './components/background/AnimatedBackground';
 import { GeminiService } from './services/gemini';
 import { AlertCircle } from 'lucide-react';
+import { useLoadingState } from './hooks/useLoadingState';
 import './styles/animations.css';
 import './styles/colors.css';
 import './styles/custom.css';
@@ -26,12 +27,17 @@ export default function App() {
     error: null
   });
 
+  const { setLoading } = useLoadingState();
   const [geminiService, setGeminiService] = useState<GeminiService | null>(null);
   const [initError, setInitError] = useState<string | null>(null);
   const [userData, setUserData] = useState<UserData | null>(() => {
     const saved = localStorage.getItem('userData');
     return saved ? JSON.parse(saved) : null;
   });
+
+  useEffect(() => {
+    setLoading(chatState.isLoading);
+  }, [chatState.isLoading, setLoading]);
 
   useEffect(() => {
     try {
