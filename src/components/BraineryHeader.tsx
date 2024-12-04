@@ -3,7 +3,7 @@ import { Brain } from 'lucide-react';
 
 export function BraineryHeader() {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-12 mb-16">
+    <div className="flex flex-col items-center justify-center gap-3 py-6 mb-8">
       <div className="relative">
         {/* Outer glowing effects */}
         <div className="absolute -inset-8 bg-[var(--accent-primary)] blur-3xl opacity-20 animate-pulse" />
@@ -13,14 +13,19 @@ export function BraineryHeader() {
         <div className="absolute -inset-6 rounded-2xl bg-[var(--accent-primary)] opacity-10 blur-2xl animate-glow" />
         
         {/* Main container with solid black background */}
-        <div className="relative flex items-center gap-6 px-12 py-8 rounded-xl bg-black border border-[rgba(0,255,157,0.2)] shadow-[0_0_30px_rgba(0,255,157,0.2)] transition-all duration-500">
-          {/* Geometric patterns */}
+        <div className="relative flex items-center gap-6 px-12 py-6 rounded-xl bg-black border border-[rgba(0,255,157,0.2)] shadow-[0_0_30px_rgba(0,255,157,0.2)] transition-all duration-500">
+          {/* Vertical lighting effects */}
           <div className="absolute inset-0 overflow-hidden rounded-xl">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent animate-pulse" />
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent animate-pulse" />
-              <div className="absolute top-0 left-0 h-full w-[1px] bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent animate-pulse" />
-              <div className="absolute top-0 right-0 h-full w-[1px] bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent animate-pulse" />
+            {/* Left vertical light */}
+            <div className="absolute left-0 w-[2px] h-full">
+              <div className="absolute inset-0 animate-light-up-down bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
+              <div className="absolute inset-0 animate-light-up-down-delayed bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-50" />
+            </div>
+            
+            {/* Right vertical light */}
+            <div className="absolute right-0 w-[2px] h-full">
+              <div className="absolute inset-0 animate-light-down-up bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-70" />
+              <div className="absolute inset-0 animate-light-down-up-delayed bg-gradient-to-b from-transparent via-[var(--accent-primary)] to-transparent opacity-50" />
             </div>
           </div>
 

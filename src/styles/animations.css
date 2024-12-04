@@ -57,6 +57,34 @@
   100% { color: #00ff9d; }
 }
 
+@keyframes know-blink {
+  0%, 20% { opacity: 1; }
+  21%, 40% { opacity: 0; }
+  41%, 60% { opacity: 1; }
+  61%, 80% { opacity: 0; }
+  81%, 100% { opacity: 1; }
+}
+
+@keyframes light-up-down {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes light-up-down-delayed {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes light-down-up {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes light-down-up-delayed {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
 .animate-rainbow-flow {
   animation: rainbow-flow 6s linear infinite;
   background-size: 200% 200%;
@@ -85,6 +113,26 @@
 
 .animate-text-color {
   animation: text-color-cycle 8s linear infinite;
+}
+
+.animate-know-blink {
+  animation: know-blink 2s steps(1) infinite;
+}
+
+.animate-light-up-down {
+  animation: light-up-down 2s linear infinite;
+}
+
+.animate-light-up-down-delayed {
+  animation: light-up-down 2s linear infinite 1s;
+}
+
+.animate-light-down-up {
+  animation: light-down-up 2s linear infinite;
+}
+
+.animate-light-down-up-delayed {
+  animation: light-down-up 2s linear infinite 1s;
 }
 
 .perspective {

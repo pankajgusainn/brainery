@@ -2,6 +2,7 @@ import React from 'react';
 import { Message } from '../types/chat';
 import { ChatMessage } from './chat/ChatMessage';
 import { LoadingAnimation } from './loading/LoadingAnimation';
+import { useScrollToBottom } from '../hooks/useScrollToBottom';
 
 interface ChatContainerProps {
   messages: Message[];
@@ -10,8 +11,13 @@ interface ChatContainerProps {
 }
 
 export function ChatContainer({ messages, isLoading, error }: ChatContainerProps) {
+  const scrollRef = useScrollToBottom([messages, isLoading]);
+
   return (
-    <div className="flex-1 p-4 space-y-4 overflow-y-auto custom-scrollbar">
+    <div 
+      ref={scrollRef}
+      className="flex-1 p-4 space-y-4 overflow-y-auto custom-scrollbar max-h-[60vh]"
+    >
       {messages.map((message, index) => (
         <ChatMessage key={index} message={message} />
       ))}
