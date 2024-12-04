@@ -9,7 +9,6 @@ import { AnimatedBackground } from './components/background/AnimatedBackground';
 import { GeminiService } from './services/gemini';
 import { AlertCircle } from 'lucide-react';
 import { useLoadingState } from './hooks/useLoadingState';
-import { usePageScroll } from './hooks/usePageScroll';
 import './styles/animations.css';
 import './styles/colors.css';
 import './styles/custom.css';
@@ -34,8 +33,6 @@ export default function App() {
     const saved = localStorage.getItem('userData');
     return saved ? JSON.parse(saved) : null;
   });
-
-  usePageScroll([chatState.messages]);
 
   useEffect(() => {
     setLoading(chatState.isLoading);
@@ -89,6 +86,12 @@ export default function App() {
         messages: [...prev.messages, assistantMessage],
         isLoading: false
       }));
+
+      // Smooth scroll to bottom after response
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
     } catch (error) {
       setChatState(prev => ({
         ...prev,
@@ -124,10 +127,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--bg-primary)] overflow-y-auto">
       <AnimatedBackground />
       
-      <div className="relative max-w-7xl mx-auto min-h-screen px-4 py-4 md:py-6">
+      <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
         <div className="relative bg-[var(--bg-secondary)] backdrop-blur-xl rounded-2xl shadow-[var(--box-shadow)] p-4 md:p-6 border border-[rgba(255,255,255,0.1)]">
           {/* Animated border lines */}
           <div className="absolute inset-0 rounded-2xl overflow-hidden">
@@ -154,20 +157,22 @@ export default function App() {
           <div className="relative z-10">
             <BraineryHeader />
             
-            <div className="flex flex-col min-h-[calc(100vh-16rem)]">
-              <ChatContainer
-                messages={chatState.messages}
-                isLoading={chatState.isLoading}
-                error={chatState.error}
-              />
-              
-              {chatState.messages.length === 0 && (
+            <div className="min-h-[400px] flex flex-col">
+              {chatState.messages.length === 0 ? (
                 <WelcomeHeader 
                   onPromptSelect={handleSendMessage}
                   userName={userData?.name}
                 />
+              ) : (
+                <ChatContainer
+                  messages={chatState.messages}
+                  isLoading={chatState.isLoading}
+                  error={chatState.error}
+                />
               )}
-              
+            </div>
+            
+            <div className="mt-4 sticky bottom-0 bg-[var(--bg-secondary)] pt-4">
               <ChatInput
                 onSend={handleSendMessage}
                 onClear={handleClearChat}
