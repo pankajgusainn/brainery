@@ -1,26 +1,18 @@
 import React from 'react';
-import { CreditCard } from 'lucide-react';
-import { PAYMENT_BUTTON_STYLES } from '../../constants/styles';
+import { PAYMENT_CONFIG } from '../../config/payments';
 
-interface CardPaymentProps {
-  onClose: () => void;
-  url: string;
-}
-
-export function CardPayment({ onClose, url }: CardPaymentProps) {
-  const handleClick = () => {
-    window.open(url, '_blank');
-    onClose();
-  };
-
+export function CardPayment() {
   return (
     <div className="w-full flex flex-col items-center">
-      <button
-        onClick={handleClick}
-        className={PAYMENT_BUTTON_STYLES}
+      <a
+        href={PAYMENT_CONFIG.STRIPE.CHECKOUT_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full text-center border-none rounded-3xl min-w-[11.625rem] px-8 h-[2.625rem] font-bold bg-[#FFD140] text-black font-['Helvetica Neue',Arial,sans-serif] text-base leading-5 cursor-pointer hover:bg-[#f4c73b] transition-colors duration-300 flex items-center justify-center"
       >
         Pay with Card
-      </button>
+      </a>
+      
       <div className="flex items-center justify-center gap-2 mt-2">
         <img 
           src="https://js.stripe.com/v3/fingerprinted/img/visa-729c05c240c4bdb47b03ac81d9945bfe.svg" 
