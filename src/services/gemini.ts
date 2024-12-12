@@ -21,7 +21,7 @@ export class GeminiService {
     }
   }
 
-  startNewChat() {
+  startNewChat(): void {
     this.chat = this.model.startChat({
       generationConfig: {
         maxOutputTokens: 2048,
@@ -30,6 +30,41 @@ export class GeminiService {
         topK: 16,
       },
     });
+  }
+
+  private formatPrompt(prompt: string): string {
+    return `
+# Instructions for Response Formatting
+
+Please provide a well-structured response following these guidelines:
+
+## Content Structure
+- Start with a clear introduction
+- Use proper heading hierarchy (# for main, ## for sub-sections)
+- Leave empty lines between sections for better readability
+
+## Formatting Elements
+- Use **bold** for important terms and concepts
+- Use *italics* for emphasis and additional context
+- Use \`code blocks\` for technical terms, commands, or syntax
+- Use >>> for important notes or callouts
+
+## Lists and Examples
+- Use bullet points for unrelated items
+- Use numbered lists for sequential steps
+- Provide relevant examples in code blocks with proper syntax highlighting
+- Include practical examples where applicable
+
+## Your Query:
+${prompt}
+
+Remember to:
+1. Keep the response clear and concise
+2. Use proper spacing between sections
+3. Highlight key information
+4. Include relevant examples
+5. End with a conclusion or summary if appropriate
+`;
   }
 
   private async findRelatedContent(topic: string): Promise<RelatedContent[]> {
@@ -82,7 +117,8 @@ export class GeminiService {
         this.startNewChat();
       }
 
-      const result = await this.chat.sendMessage(prompt);
+      const formattedPrompt = this.formatPrompt(prompt);
+      const result = await this.chat.sendMessage(formattedPrompt);
       const response = await result.response;
       const content = response.text();
 
