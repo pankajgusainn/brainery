@@ -6,20 +6,17 @@ import { WelcomeHeader } from './components/WelcomeHeader';
 import { DeveloperCredit } from './components/DeveloperCredit';
 import { BraineryHeader } from './components/BraineryHeader';
 import { AnimatedBackground } from './components/background/AnimatedBackground';
+import { SupportButton } from './components/buttons/SupportButton';
 import { GeminiService } from './services/gemini';
 import { AlertCircle } from 'lucide-react';
 import { useLoadingState } from './hooks/useLoadingState';
+import { useUserData } from './hooks/useUserData';
 import './styles/animations.css';
 import './styles/colors.css';
 import './styles/custom.css';
 import './styles/background-animations.css';
 
-interface UserData {
-  name: string;
-  age: number;
-}
-
-export default function App() {
+export function App() {
   const [chatState, setChatState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -29,10 +26,7 @@ export default function App() {
   const { setLoading } = useLoadingState();
   const [geminiService, setGeminiService] = useState<GeminiService | null>(null);
   const [initError, setInitError] = useState<string | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(() => {
-    const saved = localStorage.getItem('userData');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const { userData, setUserData } = useUserData();
 
   useEffect(() => {
     setLoading(chatState.isLoading);
@@ -48,9 +42,7 @@ export default function App() {
   }, []);
 
   const handleUserDataSubmit = (name: string, age: number) => {
-    const data = { name, age };
-    setUserData(data);
-    localStorage.setItem('userData', JSON.stringify(data));
+    setUserData({ name, age });
   };
 
   const handleSendMessage = async (content: string) => {
@@ -128,6 +120,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] overflow-y-auto">
       <AnimatedBackground />
+      <SupportButton />
       
       <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
         <div className="relative z-10">
