@@ -3,7 +3,6 @@ import { Message, ChatState } from './types/chat';
 import { ChatInput } from './components/ChatInput';
 import { ChatContainer } from './components/ChatContainer';
 import { WelcomeHeader } from './components/WelcomeHeader';
-import { DeveloperCredit } from './components/DeveloperCredit';
 import { BraineryHeader } from './components/BraineryHeader';
 import { AnimatedBackground } from './components/background/AnimatedBackground';
 import { SupportButton } from './components/buttons/SupportButton';
@@ -150,8 +149,6 @@ export function App() {
           </div>
         </div>
       </div>
-      
-      <DeveloperCredit />
     </div>
   );
 }
