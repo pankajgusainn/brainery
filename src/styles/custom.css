@@ -1,0 +1,83 @@
+/* Base styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for dark theme */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-secondary);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--accent-primary);
+  border-radius: 2px;
+}
+
+/* Glass effect */
+.glass-effect {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Input styles */
+textarea, input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+textarea:focus, input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
+}
+
+/* Button hover effects */
+.hover-glow:hover {
+  box-shadow: 0 0 15px var(--accent-primary);
+}
+
+/* Glowing elements */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: var(--accent-primary);
+  opacity: 0.5;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .glass-effect {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  textarea {
+    font-size: 16px;
+  }
+}

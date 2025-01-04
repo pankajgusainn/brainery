@@ -1,0 +1,144 @@
+@keyframes rainbow-flow {
+  0% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) brightness(1.5) saturate(1.5);
+  }
+  25% { 
+    background-position: 50% 50%;
+    filter: hue-rotate(90deg) brightness(1.8) saturate(1.8);
+  }
+  50% { 
+    background-position: 50% 50%;
+    filter: hue-rotate(180deg) brightness(1.5) saturate(1.5);
+  }
+  75% { 
+    background-position: 50% 50%;
+    filter: hue-rotate(270deg) brightness(1.8) saturate(1.8);
+  }
+  100% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(360deg) brightness(1.5) saturate(1.5);
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.5; filter: blur(10px); }
+  50% { opacity: 0.8; filter: blur(15px); }
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(-45deg); }
+  50% { transform: translateX(100%) rotate(-45deg); }
+  100% { transform: translateX(-100%) rotate(-45deg); }
+}
+
+@keyframes brain-blink {
+  0%, 49% { opacity: 1; transform: scale(1.1); filter: brightness(1.5) saturate(1.5); }
+  50%, 100% { opacity: 0.3; transform: scale(1); filter: brightness(1) saturate(1); }
+}
+
+@keyframes brain-glow {
+  0%, 49% { opacity: 0.8; transform: scale(1.2); filter: blur(8px); }
+  50%, 100% { opacity: 0.2; transform: scale(0.8); filter: blur(4px); }
+}
+
+@keyframes text-color-cycle {
+  0% { color: #00ff9d; }
+  20% { color: #00ffea; }
+  40% { color: #00a2ff; }
+  60% { color: #ff00f7; }
+  80% { color: #ff0055; }
+  100% { color: #00ff9d; }
+}
+
+@keyframes know-blink {
+  0%, 20% { opacity: 1; }
+  21%, 40% { opacity: 0; }
+  41%, 60% { opacity: 1; }
+  61%, 80% { opacity: 0; }
+  81%, 100% { opacity: 1; }
+}
+
+@keyframes light-up-down {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes light-up-down-delayed {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes light-down-up {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes light-down-up-delayed {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+.animate-rainbow-flow {
+  animation: rainbow-flow 6s linear infinite;
+  background-size: 200% 200%;
+}
+
+.animate-gradient {
+  animation: gradient 8s linear infinite;
+  background-size: 200% 200%;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: shine 3s linear infinite;
+}
+
+.animate-brain-blink {
+  animation: brain-blink 0.5s ease-in-out infinite;
+}
+
+.animate-brain-glow {
+  animation: brain-glow 0.5s ease-in-out infinite;
+}
+
+.animate-text-color {
+  animation: text-color-cycle 8s linear infinite;
+}
+
+.animate-know-blink {
+  animation: know-blink 2s steps(1) infinite;
+}
+
+.animate-light-up-down {
+  animation: light-up-down 2s linear infinite;
+}
+
+.animate-light-up-down-delayed {
+  animation: light-up-down 2s linear infinite 1s;
+}
+
+.animate-light-down-up {
+  animation: light-down-up 2s linear infinite;
+}
+
+.animate-light-down-up-delayed {
+  animation: light-down-up 2s linear infinite 1s;
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.bg-gradient-conic {
+  background-image: conic-gradient(var(--tw-gradient-stops));
+}

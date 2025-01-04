@@ -1,0 +1,45 @@
+:root {
+  /* Primary Colors */
+  --bg-primary: #000000;
+  --bg-secondary: rgba(0, 0, 0, 0.7);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  
+  /* Accent Colors */
+  --accent-primary: #00ff9d;
+  --accent-secondary: #00b8d4;
+  --accent-tertiary: #9d00ff;
+  
+  /* Gradients */
+  --curve-gradient: linear-gradient(90deg, 
+    rgba(0, 255, 157, 0) 0%,
+    rgba(0, 255, 157, 0.3) 50%,
+    rgba(0, 255, 157, 0) 100%
+  );
+  --glow-gradient: radial-gradient(
+    circle at center,
+    rgba(0, 255, 157, 0.2) 0%,
+    rgba(0, 184, 212, 0.1) 45%,
+    transparent 70%
+  );
+  --particle-gradient: linear-gradient(
+    45deg,
+    var(--accent-primary),
+    var(--accent-secondary),
+    var(--accent-tertiary)
+  );
+  
+  /* Shadows */
+  --glow-shadow: 0 0 50px rgba(0, 255, 157, 0.3);
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  background: radial-gradient(
+    circle at center,
+    #0a0a0a 0%,
+    #000000 100%
+  );
+}
