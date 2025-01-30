@@ -1,42 +1,63 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { ChatState } from '../types/chat';
-import { GeminiService } from '../services/gemini';
+import { ChatService } from '../services/chat';
 
 interface UseChatHandlersProps {
   chatState: ChatState;
   setChatState: React.Dispatch<React.SetStateAction<ChatState>>;
-  geminiService: GeminiService | null;
+  chatService: ChatService | null;
 }
 
 export function useChatHandlers({ 
   chatState, 
   setChatState, 
-  geminiService 
+  chatService 
 }: UseChatHandlersProps) {
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
+
   const handleSendMessage = useCallback(async (content: string) => {
-    if (!geminiService) {
+    if (!chatService) {
       setChatState(prev => ({
         ...prev,
-        error: 'Gemini service is not initialized'
+        error: 'Service is not initialized'
       }));
       return;
     }
 
-    const userMessage = {
-      role: 'user' as const,
-      content,
-      timestamp: Date.now()
-    };
+    // For alternative responses, use the last prompt but don't add a new user message
+    const isAlternativeRequest = content === "Please provide an alternative response";
+    const messageContent = isAlternativeRequest ? chatService.getLastPrompt() : content;
 
-    setChatState(prev => ({
-      ...prev,
-      messages: [...prev.messages, userMessage],
-      isLoading: true,
-      error: null
-    }));
+    if (!isAlternativeRequest) {
+      const userMessage = {
+        role: 'user' as const,
+        content,
+        timestamp: Date.now()
+      };
+
+      setChatState(prev => ({
+        ...prev,
+        messages: [...prev.messages, userMessage],
+        isLoading: true,
+        error: null
+      }));
+    } else {
+      setChatState(prev => ({
+        ...prev,
+        isLoading: true,
+        error: null
+      }));
+    }
+
+    scrollToBottom();
 
     try {
-      const assistantMessage = await geminiService.generateResponse(
+      const assistantMessage = await chatService.generateResponse(
         content,
         chatState.messages
       );
@@ -47,18 +68,17 @@ export function useChatHandlers({
         isLoading: false
       }));
 
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
+      scrollToBottom();
     } catch (error) {
       setChatState(prev => ({
         ...prev,
         isLoading: false,
         error: (error as Error).message
       }));
+      
+      scrollToBottom();
     }
-  }, [geminiService, chatState.messages]);
+  }, [chatService, chatState.messages]);
 
   const handleClearChat = useCallback(() => {
     setChatState({
@@ -66,10 +86,10 @@ export function useChatHandlers({
       isLoading: false,
       error: null
     });
-    if (geminiService) {
-      geminiService.startNewChat();
+    if (chatService) {
+      chatService.startNewChat();
     }
-  }, [geminiService]);
+  }, [chatService]);
 
   return {
     handleSendMessage,

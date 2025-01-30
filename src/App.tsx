@@ -6,11 +6,12 @@ import { WelcomeHeader } from './components/WelcomeHeader';
 import { BraineryHeader } from './components/BraineryHeader';
 import { AnimatedBackground } from './components/background/AnimatedBackground';
 import { SupportButton } from './components/buttons/SupportButton';
-import { GeminiService } from './services/gemini';
+import { ChatService } from './services/chat';
 import { AlertCircle } from 'lucide-react';
 import { useLoadingState } from './hooks/useLoadingState';
 import { useUserData } from './hooks/useUserData';
 import { useChatHandlers } from './hooks/useChatHandlers';
+import { WelcomeForm } from './components/WelcomeForm';
 import './styles/animations.css';
 import './styles/colors.css';
 import './styles/custom.css';
@@ -24,14 +25,15 @@ export function App() {
   });
 
   const { setLoading } = useLoadingState();
-  const [geminiService, setGeminiService] = useState<GeminiService | null>(null);
+  const [chatService, setChatService] = useState<ChatService | null>(null);
   const [initError, setInitError] = useState<string | null>(null);
   const { userData, setUserData } = useUserData();
+  const [showWelcomeForm, setShowWelcomeForm] = useState(!userData);
 
   const { handleSendMessage, handleClearChat } = useChatHandlers({
     chatState,
     setChatState,
-    geminiService
+    chatService
   });
 
   useEffect(() => {
@@ -40,12 +42,17 @@ export function App() {
 
   useEffect(() => {
     try {
-      const service = new GeminiService(import.meta.env.VITE_GEMINI_API_KEY);
-      setGeminiService(service);
+      const service = new ChatService();
+      setChatService(service);
     } catch (error) {
       setInitError((error as Error).message);
     }
   }, []);
+
+  const handleUserDataSubmit = (name: string, age: number) => {
+    setUserData({ name, age });
+    setShowWelcomeForm(false);
+  };
 
   if (initError) {
     return (
@@ -65,6 +72,10 @@ export function App() {
     <div className="min-h-screen bg-[var(--bg-primary)] overflow-y-auto">
       <AnimatedBackground />
       <SupportButton />
+      
+      {showWelcomeForm && (
+        <WelcomeForm onSubmit={handleUserDataSubmit} />
+      )}
       
       <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
         <div className="relative z-10">
@@ -89,7 +100,7 @@ export function App() {
             <ChatInput
               onSend={handleSendMessage}
               onClear={handleClearChat}
-              disabled={chatState.isLoading || !geminiService}
+              disabled={chatState.isLoading || !chatService}
             />
           </div>
         </div>
