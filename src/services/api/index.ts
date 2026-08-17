@@ -1,24 +1,18 @@
-import { GoogleGenAI } from "@google/genai";
-
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-console.log("Gemini API key loaded:", !!apiKey);
-
-const ai = new GoogleGenAI({
-  apiKey,
-});
-
 export async function generateResponse(prompt: string): Promise<string> {
-  if (!apiKey) {
-    throw new Error("Gemini API key is missing");
+  if (!prompt.trim()) {
+    throw new Error("Prompt cannot be empty");
   }
 
   try {
-    console.log("Sending prompt to Gemini...");
+    console.log("Sending prompt to backend...");
 
-    const response = await ai.models.generateContent({
-  model: "gemini-3.5-flash-lite",
-  contents: `You are a helpful, intelligent AI assistant.
+    const response = await fetch("http://localhost:3001/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: `You are a helpful, intelligent AI assistant.
 
 Answer the user's question accurately, clearly, and in sufficient detail.
 
@@ -50,13 +44,22 @@ The response must be valid Markdown that can be rendered directly in the chat in
 
 User's question:
 ${prompt}`,
+      }),
     });
 
-    console.log("Gemini response:", response);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
 
-    return response.text || "Gemini returned an empty response.";
+      throw new Error(
+        errorData?.error || `Backend request failed: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    return data.text || "The AI returned an empty response.";
   } catch (error) {
-    console.error("FULL GEMINI ERROR:", error);
+    console.error("Backend Gemini error:", error);
 
     if (error instanceof Error) {
       throw new Error(error.message);
