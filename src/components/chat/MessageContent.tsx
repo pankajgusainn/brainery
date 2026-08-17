@@ -12,114 +12,142 @@ export function MessageContent({ content }: MessageContentProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      className="max-w-none text-gray-200"
     >
-      <ReactMarkdown 
-        className="prose prose-invert max-w-none 
-          prose-headings:text-[var(--accent-primary)] 
-          prose-headings:font-semibold 
-          prose-h1:text-2xl prose-h1:mb-6 prose-h1:mt-8
-          prose-h2:text-xl prose-h2:mb-4 prose-h2:mt-6
-          prose-h3:text-lg prose-h3:mb-3 prose-h3:mt-4
-          prose-p:mb-4 prose-p:leading-relaxed prose-p:text-gray-200
-          prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6
-          prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-6
-          prose-li:mb-2 prose-li:text-gray-300
-          prose-code:text-[var(--accent-secondary)]
-          prose-code:bg-[rgba(0,255,157,0.1)]
-          prose-code:px-2 prose-code:py-0.5 prose-code:rounded-md
-          prose-pre:bg-[rgba(0,0,0,0.3)]
-          prose-pre:border prose-pre:border-[rgba(255,255,255,0.1)]
-          prose-pre:p-4 prose-pre:rounded-lg prose-pre:my-4
-          prose-blockquote:border-l-4
-          prose-blockquote:border-[var(--accent-primary)]
-          prose-blockquote:pl-4 prose-blockquote:py-1
-          prose-blockquote:my-4 prose-blockquote:bg-[rgba(0,255,157,0.05)]
-          prose-blockquote:rounded-r-lg
-          prose-strong:text-[var(--accent-primary)]
-          prose-em:text-gray-300
-          [&>*:first-child]:mt-0
-          [&>*:last-child]:mb-0
-          [&_a]:text-[var(--accent-primary)]
-          [&_a:hover]:text-[var(--accent-secondary)]
-          [&_a]:underline
-          [&_a]:transition-colors
-          [&_table]:w-full
-          [&_table]:border-collapse
-          [&_th]:bg-[rgba(0,255,157,0.1)]
-          [&_th]:p-2
-          [&_td]:border
-          [&_td]:border-[rgba(255,255,255,0.1)]
-          [&_td]:p-2
-          [&_hr]:border-[rgba(255,255,157,0.2)]
-          [&_hr]:my-6
-          [&_img]:rounded-lg
-          [&_img]:border
-          [&_img]:border-[rgba(255,255,255,0.1)]
-          [&_img]:shadow-lg
-          [&_details]:bg-[rgba(0,255,157,0.05)]
-          [&_details]:rounded-lg
-          [&_details]:p-4
-          [&_details]:border
-          [&_details]:border-[rgba(255,255,157,0.2)]
-          [&_summary]:cursor-pointer
-          [&_summary:hover]:text-[var(--accent-primary)]"
+      <ReactMarkdown
         components={{
-          h1: ({ node, ...props }) => (
+          h1: ({ children }) => (
             <motion.h1
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              {...props}
-            />
+              className="text-2xl font-bold text-[var(--accent-primary)] mt-6 mb-4"
+            >
+              {children}
+            </motion.h1>
           ),
-          h2: ({ node, ...props }) => (
+
+          h2: ({ children }) => (
             <motion.h2
               initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              {...props}
-            />
+              className="text-xl font-semibold text-[var(--accent-primary)] mt-6 mb-3"
+            >
+              {children}
+            </motion.h2>
           ),
-          h3: ({ node, ...props }) => (
-            <motion.h3
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              {...props}
-            />
+
+          h3: ({ children }) => (
+            <h3 className="text-lg font-semibold text-[var(--accent-primary)] mt-5 mb-2">
+              {children}
+            </h3>
           ),
-          blockquote: ({ node, ...props }) => (
-            <motion.blockquote
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              {...props}
-            />
+
+          p: ({ children }) => (
+            <p className="mb-4 leading-7 text-gray-200">
+              {children}
+            </p>
           ),
-          pre: ({ node, ...props }) => (
-            <motion.pre
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              {...props}
-            />
+
+          ul: ({ children }) => (
+            <ul className="my-4 ml-6 list-disc space-y-2">
+              {children}
+            </ul>
           ),
-          ul: ({ node, ...props }) => (
-            <motion.ul
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              {...props}
-            />
+
+          ol: ({ children }) => (
+            <ol className="my-4 ml-6 list-decimal space-y-2">
+              {children}
+            </ol>
           ),
-          ol: ({ node, ...props }) => (
-            <motion.ol
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              {...props}
-            />
-          )
+
+          li: ({ children }) => (
+            <li className="leading-7 text-gray-200">
+              {children}
+            </li>
+          ),
+
+          strong: ({ children }) => (
+            <strong className="font-semibold text-white">
+              {children}
+            </strong>
+          ),
+
+          em: ({ children }) => (
+            <em className="text-gray-300">
+              {children}
+            </em>
+          ),
+
+          code: ({ children, className }) => {
+            const isBlock = className?.includes('language-');
+
+            if (isBlock) {
+              return (
+                <code className="block">
+                  {children}
+                </code>
+              );
+            }
+
+            return (
+              <code className="rounded bg-white/10 px-1.5 py-0.5 text-sm text-[var(--accent-secondary)]">
+                {children}
+              </code>
+            );
+          },
+
+          pre: ({ children }) => (
+            <pre className="my-5 overflow-x-auto rounded-lg border border-white/10 bg-black/40 p-4">
+              {children}
+            </pre>
+          ),
+
+          blockquote: ({ children }) => (
+            <blockquote className="my-5 border-l-4 border-[var(--accent-primary)] bg-white/5 py-2 pl-4 text-gray-300">
+              {children}
+            </blockquote>
+          ),
+
+          table: ({ children }) => (
+            <div className="my-6 overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                {children}
+              </table>
+            </div>
+          ),
+
+          thead: ({ children }) => (
+            <thead className="bg-white/10">
+              {children}
+            </thead>
+          ),
+
+          th: ({ children }) => (
+            <th className="border border-white/10 px-4 py-3 font-semibold text-white">
+              {children}
+            </th>
+          ),
+
+          td: ({ children }) => (
+            <td className="border border-white/10 px-4 py-3 text-gray-300">
+              {children}
+            </td>
+          ),
+
+          hr: () => (
+            <hr className="my-6 border-white/10" />
+          ),
+
+          a: ({ children, href }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--accent-primary)] underline hover:text-[var(--accent-secondary)]"
+            >
+              {children}
+            </a>
+          ),
         }}
       >
         {content}
