@@ -30,7 +30,7 @@ export function useChatHandlers({
     }
 
     const isAlternativeRequest =
-      content === "Please provide an alternative response";
+      content === 'Please provide an alternative response';
 
     if (!isAlternativeRequest) {
       const userMessage = {
@@ -53,7 +53,9 @@ export function useChatHandlers({
       }));
     }
 
-    scrollToBottom();
+    setTimeout(() => {
+      scrollToBottom();
+    }, 50);
 
     try {
       const assistantMessage = {
@@ -89,14 +91,16 @@ export function useChatHandlers({
 
             return {
               ...prev,
-              isLoading: hasReceivedFirstChunk ? prev.isLoading : false,
+              isLoading: hasReceivedFirstChunk
+                ? prev.isLoading
+                : false,
               messages
             };
           });
 
           hasReceivedFirstChunk = true;
 
-          scrollToBottom();
+          // Do NOT scroll during streaming.
         }
       );
 
@@ -105,7 +109,9 @@ export function useChatHandlers({
         isLoading: false
       }));
 
-      scrollToBottom();
+      setTimeout(() => {
+        scrollToBottom();
+      }, 50);
 
     } catch (error) {
       setChatState(prev => ({
