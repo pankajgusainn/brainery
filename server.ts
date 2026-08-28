@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 
 dotenv.config();
 
@@ -10,6 +10,29 @@ const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
+
+const apiKey = process.env.NVIDIA_API_KEY;
+
+if (!apiKey) {
+  console.error("NVIDIA_API_KEY is missing from .env");
+  process.exit(1);
+}
+
+const client = new OpenAI({
+  apiKey: apiKey,
+  baseURL: "https://integrate.api.nvidia.com/v1",
+});
+
+const SYSTEM_PROMPT =
+  "You are a helpful AI assistant. " +
+  "Answer the user's question accurately, clearly, naturally, and in sufficient detail. " +
+  "Use Markdown formatting. " +
+  "Use headings when useful. " +
+  "Use bullet points and numbered lists when appropriate. " +
+  "Use bold for important concepts. " +
+  "Use inline code for commands, filenames, variables, and technical terms. " +
+  "Use fenced code blocks for programming code. " +
+  "Keep answers natural and easy to read.";
 
 app.post("/api/chat", async (req, res) => {
   try {
@@ -21,38 +44,52 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    console.log("Sending prompt to Nemotron...");
 
-    if (!apiKey) {
-      console.error("GEMINI_API_KEY is missing");
+    const stream = await client.chat.completions.create({
+      model: "nvidia/nemotron-3-super-120b-a12b",
+      messages: [
+        {
+          role: "system",
+          content: SYSTEM_PROMPT,
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+      temperature: 1,
+      top_p: 0.95,
+      max_tokens: 2048,
+      stream: true,
+    });
+
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    for await (const chunk of stream) {
+      const text = chunk.choices[0]?.delta?.content;
+
+      if (text) {
+        process.stdout.write(text);
+        res.write(text);
+      }
+    }
+
+    console.log("\nNemotron response completed.");
+
+    res.end();
+  } catch (error) {
+    console.error("Nemotron API error:", error);
+
+    if (!res.headersSent) {
       return res.status(500).json({
-        error: "Server API key is not configured",
+        error: "Failed to generate response",
       });
     }
 
-    const ai = new GoogleGenAI({
-      apiKey,
-    });
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: message,
-      config: {
-        thinkingConfig: {
-          thinkingLevel: "minimal",
-        },
-      },
-    });
-
-    return res.status(200).json({
-      text: response.text || "",
-    });
-  } catch (error) {
-    console.error("Gemini API error:", error);
-
-    return res.status(500).json({
-      error: "Failed to generate response",
-    });
+    res.end();
   }
 });
 

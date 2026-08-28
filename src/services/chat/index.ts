@@ -1,10 +1,13 @@
-import { generateResponse } from '../api';
-import { Message } from '../../types/chat';
-import { formatResponse, generateAlternativePrompt } from './formatters';
+import { generateResponse } from "../api";
+import { Message } from "../../types/chat";
+import {
+  formatResponse,
+  generateAlternativePrompt,
+} from "./formatters";
 
 export class ChatService {
   private chat: any;
-  private lastPrompt: string = '';
+  private lastPrompt: string = "";
   private alternativeCount: number = 0;
 
   constructor() {
@@ -13,20 +16,27 @@ export class ChatService {
 
   startNewChat(): void {
     this.chat = null;
-    this.lastPrompt = '';
+    this.lastPrompt = "";
     this.alternativeCount = 0;
   }
 
-  async generateResponse(prompt: string, history: Message[]): Promise<Message> {
+  async generateResponse(
+    prompt: string,
+    history: Message[],
+    onChunk?: (chunk: string) => void
+  ): Promise<Message> {
     if (!prompt.trim()) {
-      throw new Error('Prompt cannot be empty');
+      throw new Error("Prompt cannot be empty");
     }
 
     try {
       let finalPrompt: string;
-      
+
       // Handle alternative response requests
-      if (prompt === "Please provide an alternative response" && this.lastPrompt) {
+      if (
+        prompt === "Please provide an alternative response" &&
+        this.lastPrompt
+      ) {
         this.alternativeCount++;
         finalPrompt = generateAlternativePrompt(this.lastPrompt);
       } else {
@@ -36,21 +46,41 @@ export class ChatService {
         finalPrompt = prompt;
       }
 
-      const rawContent = await generateResponse(finalPrompt);
-      const formattedContent = formatResponse(rawContent);
+      let streamedContent = "";
+
+      const rawContent = await generateResponse(
+        finalPrompt,
+        (chunk) => {
+          streamedContent += chunk;
+
+          // Send each chunk to the UI
+          if (onChunk) {
+            onChunk(chunk);
+          }
+        }
+      );
+
+      const formattedContent = formatResponse(
+        streamedContent || rawContent
+      );
 
       // Add a note if this is an alternative response
-      const content = this.alternativeCount > 0
-        ? `Alternative Perspective #${this.alternativeCount}\n\n${formattedContent}`
-        : formattedContent;
+      const content =
+        this.alternativeCount > 0
+          ? `Alternative Perspective #${this.alternativeCount}\n\n${formattedContent}`
+          : formattedContent;
 
       return {
-        role: 'assistant',
+        role: "assistant",
         content,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
     } catch (error) {
-      throw new Error(`Failed to generate response: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to generate response: ${
+          (error as Error).message
+        }`
+      );
     }
   }
 

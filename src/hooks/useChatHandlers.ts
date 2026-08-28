@@ -8,10 +8,10 @@ interface UseChatHandlersProps {
   chatService: ChatService | null;
 }
 
-export function useChatHandlers({ 
-  chatState, 
-  setChatState, 
-  chatService 
+export function useChatHandlers({
+  chatState,
+  setChatState,
+  chatService
 }: UseChatHandlersProps) {
   const scrollToBottom = () => {
     window.scrollTo({
@@ -29,9 +29,8 @@ export function useChatHandlers({
       return;
     }
 
-    // For alternative responses, use the last prompt but don't add a new user message
-    const isAlternativeRequest = content === "Please provide an alternative response";
-    const messageContent = isAlternativeRequest ? chatService.getLastPrompt() : content;
+    const isAlternativeRequest =
+      content === "Please provide an alternative response";
 
     if (!isAlternativeRequest) {
       const userMessage = {
@@ -57,28 +56,67 @@ export function useChatHandlers({
     scrollToBottom();
 
     try {
-      const assistantMessage = await chatService.generateResponse(
-        content,
-        chatState.messages
-      );
+      const assistantMessage = {
+        role: 'assistant' as const,
+        content: '',
+        timestamp: Date.now()
+      };
 
       setChatState(prev => ({
         ...prev,
         messages: [...prev.messages, assistantMessage],
+        isLoading: true,
+        error: null
+      }));
+
+      let hasReceivedFirstChunk = false;
+
+      await chatService.generateResponse(
+        content,
+        chatState.messages,
+        (chunk: string) => {
+          setChatState(prev => {
+            const messages = [...prev.messages];
+
+            const lastMessage = messages[messages.length - 1];
+
+            if (lastMessage?.role === 'assistant') {
+              messages[messages.length - 1] = {
+                ...lastMessage,
+                content: lastMessage.content + chunk
+              };
+            }
+
+            return {
+              ...prev,
+              isLoading: hasReceivedFirstChunk ? prev.isLoading : false,
+              messages
+            };
+          });
+
+          hasReceivedFirstChunk = true;
+
+          scrollToBottom();
+        }
+      );
+
+      setChatState(prev => ({
+        ...prev,
         isLoading: false
       }));
 
       scrollToBottom();
+
     } catch (error) {
       setChatState(prev => ({
         ...prev,
         isLoading: false,
         error: (error as Error).message
       }));
-      
+
       scrollToBottom();
     }
-  }, [chatService, chatState.messages]);
+  }, [chatService, chatState.messages, setChatState]);
 
   const handleClearChat = useCallback(() => {
     setChatState({
@@ -86,10 +124,11 @@ export function useChatHandlers({
       isLoading: false,
       error: null
     });
+
     if (chatService) {
       chatService.startNewChat();
     }
-  }, [chatService]);
+  }, [chatService, setChatState]);
 
   return {
     handleSendMessage,
